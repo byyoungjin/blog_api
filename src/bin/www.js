@@ -7,6 +7,8 @@
 import app from "../app";
 import debugLib from "debug";
 import http from "http";
+import { sequelize } from "../sequelize/models";
+
 const debug = debugLib("your-project-name:server");
 
 /**
@@ -26,9 +28,12 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
-server.on("error", onError);
-server.on("listening", onListening);
+sequelize.sync().then(() => {
+  server.listen(port);
+  server.on("error", onError);
+  server.on("listening", onListening);
+  if (!process.env.PORT) console.log(`listening on localhost:${port}`);
+});
 
 /**
  * Normalize a port into a number, string, or false.
