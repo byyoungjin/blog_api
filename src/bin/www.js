@@ -7,7 +7,7 @@
 import app from "../app";
 import debugLib from "debug";
 import http from "http";
-import { sequelize } from "../sequelize/models";
+import { sequelize } from "@/sequelize/models";
 
 const debug = debugLib("your-project-name:server");
 
