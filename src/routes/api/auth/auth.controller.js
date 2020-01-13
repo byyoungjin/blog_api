@@ -47,7 +47,7 @@ export const register = (req, res) => {
 
   //handle eror
   const onError = error => {
-    console.log("error.meeage", error.message);
+    console.log("error.message", error.message);
     res.status(409).json({
       message: error.message
     });
@@ -79,13 +79,16 @@ export const login = (req, res) => {
       const isCorrectPassword = User.verify(password, user.password);
       if (isCorrectPassword) {
         const p = new Promise((resolve, reject) => {
+          const userBasicData = {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            emailAddress: user.emailAddress
+          };
           jwt.sign(
             {
               //payload
-              id: user.id,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              emailAddress: user.emailAddress,
+              ...userBasicData,
               admin: user.admin
             },
             secret,
@@ -97,7 +100,7 @@ export const login = (req, res) => {
             },
             (error, token) => {
               if (error) reject(error);
-              resolve(token);
+              resolve({ ...userBasicData, token });
             }
           );
         });
@@ -110,10 +113,10 @@ export const login = (req, res) => {
     }
   };
 
-  const respond = token => {
+  const respond = userData => {
     res.json({
       message: "login successful",
-      token
+      userData
     });
   };
 

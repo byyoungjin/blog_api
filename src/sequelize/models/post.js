@@ -3,8 +3,8 @@ module.exports = (sequelize, DataTypes) => {
   const Post = sequelize.define(
     "Post",
     {
-      editorContentState: DataTypes.STRING,
-      editorTitleState: DataTypes.STRING
+      editorContentState: DataTypes.TEXT,
+      editorTitleState: DataTypes.TEXT
     },
     {}
   );
