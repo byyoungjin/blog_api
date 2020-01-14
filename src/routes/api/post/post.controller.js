@@ -18,10 +18,12 @@ export const getPostById = async (req, res) => {
 
 export const createPost = async (req, res) => {
   const postData = req.body;
-  await Post.create({ ...postData });
+  const createdPost = await Post.create({ ...postData });
+  const createdPostId = createdPost.dataValues.id;
   res.json({
     message: "post created!",
-    data: postData
+    data: postData,
+    createdPostId
   });
 };
 

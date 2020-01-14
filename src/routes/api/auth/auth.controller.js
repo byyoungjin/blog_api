@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import R from "ramda";
 
 import { Post, User } from "@/sequelize/models";
 

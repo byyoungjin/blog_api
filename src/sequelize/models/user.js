@@ -32,7 +32,6 @@ module.exports = (sequelize, DataTypes) => {
 
   User.createEncripted = user => {
     const { password } = user;
-    console.log("user", password);
     const encripted = crypto
       .createHmac("sha1", config.secret)
       .update(password)
