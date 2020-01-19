@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     "Post",
     {
       editorContentState: DataTypes.TEXT,
-      editorTitleState: DataTypes.TEXT
+      editorTitleState: DataTypes.LONGTEXT
     },
     {}
   );
