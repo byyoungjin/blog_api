@@ -8,12 +8,20 @@ export const getPostsOfUser = async (req, res) => {
   });
 };
 
+export const getAllPosts = async (req, res) => {
+  const posts = await Post.findAll();
+  res.json({
+    posts
+  });
+};
+
 export const getPostById = async (req, res) => {
   const postId = req.params.postId;
-  const post = await Post.findOne({ where: { id: postId } });
-  res.json({
-    post
-  });
+  console.log("postId", postId);
+  const postObj = await Post.findOne({ where: { id: postId } });
+  const post = postObj.dataValues;
+  console.log("post", post);
+  res.json(post);
 };
 
 export const createPost = async (req, res) => {

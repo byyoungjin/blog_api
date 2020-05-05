@@ -1,31 +1,17 @@
 import jwt from "jsonwebtoken";
 
-export const authMiddleware = (req, res, next) => {
+import { wrapperAsync } from "@/helper";
+
+export const authMiddleware = wrapperAsync(async (req, res, next) => {
   const token = req.headers["x-access-token"] || req.query.token;
+  console.log("token", token);
 
   if (!token) {
-    res.status(403).json({
-      message: "Not logged in!",
-      success: false
-    });
+    const error = new Error("Not logged in!");
+    error.status = 403;
+    throw error;
   }
-
-  const p = new Promise((resolve, reject) => {
-    jwt.verify(token, req.app.get("jwt-token-secret"), (error, decoded) => {
-      if (error) reject(error);
-      resolve(decoded);
-    });
-  });
-
-  const onError = error => {
-    res.status(403).json({
-      message: error.message,
-      success: false
-    });
-  };
-
-  p.then(decoded => {
-    req.decoded = decoded;
-    next();
-  }).catch(onError);
-};
+  const decoded = jwt.verify(token, req.app.get("jwt-token-secret"));
+  req.decoded = decoded;
+  next();
+});

@@ -9,6 +9,8 @@ import debugLib from "debug";
 import http from "http";
 import { sequelize } from "@/sequelize/models";
 
+const env = process.env.NODE_ENV;
+
 const debug = debugLib("your-project-name:server");
 
 /**
@@ -28,7 +30,12 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-sequelize.sync().then(() => {
+let syncOptions = {};
+if (env === "development") {
+  syncOptions = { force: true };
+}
+
+sequelize.sync(syncOptions).then(() => {
   server.listen(port);
   server.on("error", onError);
   server.on("listening", onListening);

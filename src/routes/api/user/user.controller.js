@@ -22,7 +22,7 @@ export const assignAdmin = (req, res, next) => {
 };
 
 const isAuthorizedByToken = (req, res) => {
-  if (!req.decoded.admin) {
+  if (!req.decoded) {
     res.status(403).json({
       message: "you are not authorized"
     });

@@ -1,6 +1,12 @@
-import jwt from "jsonwebtoken";
-
 import { Post, User } from "@/sequelize/models";
+
+import { wrapperAsync } from "@/helper";
+import {
+  checkUniqueEmail,
+  checkRegisteredEmail,
+  checkUserPassword,
+  issueTokenToUser
+} from "./helper";
 
 /**
  * POST /api/auth/register
@@ -14,49 +20,16 @@ import { Post, User } from "@/sequelize/models";
  *
  */
 
-export const register = (req, res) => {
+export const register = wrapperAsync(async (req, res) => {
   const user = req.body;
   const { emailAddress } = user;
   //check User email
-  const isItUniqueEmail = async user => {
-    const foundUser = await User.findOne({
-      where: { emailAddress: user.emailAddress }
-    });
-    if (foundUser) {
-      return null;
-    } else {
-      return user;
-    }
-  };
+  await checkUniqueEmail(emailAddress);
 
   //assign User
-  const createUser = async user => {
-    if (user) {
-      const maybeAdminUser = await assignAdminIfFirst(user);
-      return User.createEncripted(maybeAdminUser);
-    } else {
-      throw new Error("Email exists");
-    }
-  };
-
-  //response
-  const respond = user => {
-    res.json(user);
-  };
-
-  //handle eror
-  const onError = error => {
-    console.log("error.message", error.message);
-    res.status(409).json({
-      message: error.message
-    });
-  };
-
-  isItUniqueEmail(user)
-    .then(createUser)
-    .then(respond)
-    .catch(onError);
-};
+  const userObj = await User.createEncrypted(user);
+  res.json(userObj.dataValues);
+});
 
 /**
  * POST /api/auth/login
@@ -66,83 +39,21 @@ export const register = (req, res) => {
  } 
  *
  */
-export const login = (req, res) => {
+export const login = wrapperAsync(async (req, res) => {
   const userInfo = req.body;
 
-  const check = async userInfo => {
-    const { emailAddress, password } = userInfo;
-    const secret = req.app.get("jwt-token-secret");
+  const { emailAddress, password } = userInfo;
 
-    const user = await User.findOne({ where: { emailAddress } });
-    if (user) {
-      const isCorrectPassword = User.verify(password, user.password);
-      if (isCorrectPassword) {
-        const p = new Promise((resolve, reject) => {
-          const userBasicData = {
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            emailAddress: user.emailAddress
-          };
-          jwt.sign(
-            {
-              //payload
-              ...userBasicData,
-              admin: user.admin
-            },
-            secret,
-            {
-              //options
-              expiresIn: "7d",
-              issuer: "youngjin-ha",
-              subject: "userInfo"
-            },
-            (error, token) => {
-              if (error) reject(error);
-              resolve({ ...userBasicData, token });
-            }
-          );
-        });
-        return p;
-      } else {
-        throw new Error("Password not matching");
-      }
-    } else {
-      throw new Error("Email not registered");
-    }
-  };
+  const userObj = await checkRegisteredEmail(emailAddress);
+  const user = userObj.dataValues;
+  const encryptedPassword = user.password;
+  await checkUserPassword({ password, encryptedPassword });
 
-  const respond = userData => {
-    res.json({
-      message: "login successful",
-      userData
-    });
-  };
+  const userWithToken = await issueTokenToUser(user);
+  res.json(userWithToken);
+});
 
-  const onError = error => {
-    console.log("error", error);
-    res.status(403).json({
-      message: error.message
-    });
-  };
-
-  check(userInfo)
-    .then(respond)
-    .catch(onError);
-};
-
-export const check = (req, res) => {
-  res.json({
-    success: true,
-    info: req.decoded
-  });
-};
-
-const assignAdminIfFirst = async user => {
-  const userCount = await User.count();
-  const isAdmin = userCount ? false : true;
-  return {
-    ...user,
-    admin: isAdmin
-  };
+export const whoAmI = (req, res) => {
+  const { decoded } = req;
+  res.json(decoded);
 };

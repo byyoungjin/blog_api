@@ -4,12 +4,14 @@ import {
   getPostById,
   createPost,
   deletePost,
-  updatePost
+  updatePost,
+  getAllPosts
 } from "./post.controller";
 
 const router = express.Router();
 
 router.get("/getPosts/:userId", getPostsOfUser);
+router.get("/getAllPosts", getAllPosts);
 router.get("/getPost/:postId", getPostById);
 router.post("/createPost", createPost);
 router.post("/deletePost/:postId", deletePost);

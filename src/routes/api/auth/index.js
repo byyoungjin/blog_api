@@ -1,12 +1,11 @@
 import express from "express";
-import { register, login, check } from "./auth.controller";
+import { register, login, whoAmI } from "./auth.controller";
 import { authMiddleware } from "@/middlewares/auth";
 
 const router = express.Router();
 
 router.post("/register", register);
 router.post("/login", login);
-router.use("/check", authMiddleware);
-router.post("/check", check);
+router.get("/whoAmI", authMiddleware, whoAmI);
 
 export default router;

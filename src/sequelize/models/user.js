@@ -1,6 +1,6 @@
 "use strict";
-import crypto from "crypto";
-import config from "@/config";
+import { encrypt } from "@/helper";
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     "User",
@@ -30,24 +30,18 @@ module.exports = (sequelize, DataTypes) => {
     );
   };
 
-  User.createEncripted = user => {
+  User.createEncrypted = user => {
     const { password } = user;
-    const encripted = crypto
-      .createHmac("sha1", config.secret)
-      .update(password)
-      .digest("base64");
+    const encriptedPassword = encrypt(password);
     return User.create({
       ...user,
-      password: encripted
+      password: encriptedPassword
     });
   };
 
-  User.verify = (inputPassword, EncryptedPassword) => {
-    const encriptedInput = crypto
-      .createHmac("sha1", config.secret)
-      .update(inputPassword)
-      .digest("base64");
-    return encriptedInput === EncryptedPassword;
+  User.verify = ({ password, encryptedPassword }) => {
+    const encriptedInput = encrypt(password);
+    return encriptedInput === encryptedPassword;
   };
 
   return User;
