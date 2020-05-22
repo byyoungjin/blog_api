@@ -12,21 +12,31 @@ export const getPostsOfUser = async (req, res) => {
 export const getPostByTagId = wrapperAsync(async (req, res) => {
   const { tagId } = req.params;
   const tagObj = await Tag.findByPk(tagId);
-  const postsObjects = await tagObj.getPosts();
+  const postsObjects = await tagObj.getPosts({
+    include: [
+      Tag,
+      {
+        model: User,
+        attributes: ["id", "emailAddress", "firstName", "lastName"]
+      }
+    ]
+  });
   const posts = postsObjects.map(postObj => postObj.dataValues);
-  console.log("posts", posts);
   res.json({
     posts
   });
 });
 
-export const getPostsOfTag = async (req, res) => {
-  const { tagId } = req.param;
-  const tags = await Post.findOne({ tagId });
-};
-
 export const getAllPosts = async (req, res) => {
-  const posts = await Post.findAll({ include: [Tag, User] });
+  const posts = await Post.findAll({
+    include: [
+      Tag,
+      {
+        model: User,
+        attributes: ["id", "emailAddress", "firstName", "lastName"]
+      }
+    ]
+  });
   res.json({
     posts
   });
@@ -34,7 +44,16 @@ export const getAllPosts = async (req, res) => {
 
 export const getPostById = async (req, res) => {
   const postId = req.params.postId;
-  const postObj = await Post.findOne({ where: { id: postId } });
+  const postObj = await Post.findOne({
+    where: { id: postId },
+    include: [
+      Tag,
+      {
+        model: User,
+        attributes: ["id", "emailAddress", "firstName", "lastName"]
+      }
+    ]
+  });
   const post = postObj.dataValues;
   res.json(post);
 };
