@@ -10,6 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  Post.associate = function(models) {};
+  Post.associate = function(models) {
+    Post.belongsToMany(models.Tag, { through: "PostTagJunction" });
+  };
   return Post;
 };
