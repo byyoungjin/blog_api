@@ -1,9 +1,9 @@
 import express from "express";
 
-import { mapPostTag } from "./post.controller";
+import { findOrMapPostTag } from "./postTag.controller";
 
 const router = express.Router();
 
-router.post("/mapPostTag", mapPostTag);
+router.post("/findOrMapPostTag", findOrMapPostTag);
 
 export default router;
