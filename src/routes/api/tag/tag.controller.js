@@ -1,4 +1,4 @@
-import { Tag } from "@/sequelize/models";
+import { Tag, Post } from "@/sequelize/models";
 import { wrapperAsync } from "@/helper";
 
 export const getAllTags = wrapperAsync(async (req, res) => {
@@ -26,5 +26,23 @@ export const deleteTag = wrapperAsync(async (req, res) => {
   await Tag.destroy({ where: { id: tagId } });
   res.json({
     message: "post deleted!"
+  });
+});
+
+export const getTagsOfPostId = wrapperAsync(async (req, res) => {
+  const { postId } = req.params;
+  const postObj = await Post.findByPk(postId);
+  const tags = await postObj.getTags();
+  res.json({
+    tags
+  });
+});
+
+export const isInTags = wrapperAsync(async (req, res) => {
+  const { tagName } = req.body;
+  const tagObj = await Tag.findOne({ where: { tagName } });
+  const tagId = tagObj ? tagObj.id : false;
+  res.json({
+    tagId
   });
 });

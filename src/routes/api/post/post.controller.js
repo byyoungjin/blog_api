@@ -1,17 +1,19 @@
 import { Post, Tag, User } from "@/sequelize/models";
 import { wrapperAsync } from "@/helper";
 
+const postIncludes = [
+  Tag,
+  {
+    model: User,
+    attributes: ["id", "emailAddress", "firstName", "lastName"]
+  }
+];
+
 export const getPostsOfUser = async (req, res) => {
   const userId = req.params.userId;
   const posts = await Post.findAll({
     where: { UserId: userId },
-    include: [
-      Tag,
-      {
-        model: User,
-        attributes: ["id", "emailAddress", "firstName", "lastName"]
-      }
-    ]
+    include: postIncludes
   });
   res.json({
     posts
@@ -22,13 +24,7 @@ export const getPostByTagId = wrapperAsync(async (req, res) => {
   const { tagId } = req.params;
   const tagObj = await Tag.findByPk(tagId);
   const postsObjects = await tagObj.getPosts({
-    include: [
-      Tag,
-      {
-        model: User,
-        attributes: ["id", "emailAddress", "firstName", "lastName"]
-      }
-    ]
+    include: postIncludes
   });
   const posts = postsObjects.map(postObj => postObj.dataValues);
   res.json({
@@ -38,13 +34,7 @@ export const getPostByTagId = wrapperAsync(async (req, res) => {
 
 export const getAllPosts = async (req, res) => {
   const posts = await Post.findAll({
-    include: [
-      Tag,
-      {
-        model: User,
-        attributes: ["id", "emailAddress", "firstName", "lastName"]
-      }
-    ]
+    include: postIncludes
   });
   res.json({
     posts
@@ -55,13 +45,7 @@ export const getPostById = async (req, res) => {
   const postId = req.params.postId;
   const postObj = await Post.findOne({
     where: { id: postId },
-    include: [
-      Tag,
-      {
-        model: User,
-        attributes: ["id", "emailAddress", "firstName", "lastName"]
-      }
-    ]
+    include: postIncludes
   });
   const post = postObj.dataValues;
   res.json(post);
