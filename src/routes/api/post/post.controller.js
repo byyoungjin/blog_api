@@ -3,7 +3,16 @@ import { wrapperAsync } from "@/helper";
 
 export const getPostsOfUser = async (req, res) => {
   const userId = req.params.userId;
-  const posts = await Post.findAll({ where: { UserId: userId } });
+  const posts = await Post.findAll({
+    where: { UserId: userId },
+    include: [
+      Tag,
+      {
+        model: User,
+        attributes: ["id", "emailAddress", "firstName", "lastName"]
+      }
+    ]
+  });
   res.json({
     posts
   });
