@@ -6,7 +6,8 @@ import { wrapperAsync } from "@/helper";
 aws.config.update({
   region: awsConfig.region,
   accessKeyId: awsConfig.accessKeyId,
-  secretAccessKey: awsConfig.secretAccessKey
+  secretAccessKey: awsConfig.secretAccessKey,
+  signiture: "v4"
 });
 
 const S3_BUCKET = awsConfig.bucketName;
