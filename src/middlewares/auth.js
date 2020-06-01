@@ -4,7 +4,6 @@ import { wrapperAsync } from "@/helper";
 
 export const authMiddleware = wrapperAsync(async (req, res, next) => {
   const token = req.headers["x-access-token"] || req.query.token;
-  console.log("token", token);
 
   if (!token) {
     const error = new Error("Not logged in!");
