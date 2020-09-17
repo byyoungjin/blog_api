@@ -8,17 +8,9 @@ import {
   issueTokenToUser
 } from "./helper";
 
-/**
- * POST /api/auth/register
- *{
-     emailAddress,
-     password,
-     firstName,
-     lastName,
-     admin
- } 
- *
- */
+import { CookieHelper } from "../helper/CookieHelper";
+
+const cookieHelper = new CookieHelper();
 
 export const register = wrapperAsync(async (req, res) => {
   const user = req.body;
@@ -31,14 +23,6 @@ export const register = wrapperAsync(async (req, res) => {
   res.json(userObj.dataValues);
 });
 
-/**
- * POST /api/auth/login
- *{
-     emailAddress,
-     password
- } 
- *
- */
 export const login = wrapperAsync(async (req, res) => {
   const userInfo = req.body;
 
@@ -50,7 +34,12 @@ export const login = wrapperAsync(async (req, res) => {
   await checkUserPassword({ password, encryptedPassword });
 
   const userWithToken = await issueTokenToUser(user);
-  res.json(userWithToken);
+  const { token } = userWithToken;
+  console.log("token", token);
+
+  const cookieSetting = cookieHelper.getCookieSetting();
+  console.log("cookieSetting", cookieSetting);
+  res.cookie("AUTH_TOKEN", token, cookieSetting).json(userWithToken);
 });
 
 export const whoAmI = (req, res) => {
