@@ -42,6 +42,10 @@ export const login = wrapperAsync(async (req, res) => {
   res.cookie("AUTH_TOKEN", token, cookieSetting).json(userWithToken);
 });
 
+export const logout = wrapperAsync(async (req, res) => {
+  res.clearCookie("AUTH_TOKEN").json({ message: "cookie cleared!" });
+});
+
 export const whoAmI = (req, res) => {
   const { decoded } = req;
   res.json(decoded);
