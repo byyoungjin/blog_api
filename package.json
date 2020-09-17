@@ -7,11 +7,9 @@
     "server": "babel-node ./src/bin/www",
     "server:prod": "node ./dist/bin/www ",
     "dev": "NODE_ENV=development npm-run-all server",
-    "dev:light": "NODE_ENV=development_light npm-run-all server",
-    "test": "NODE_ENV=test npm-run-all server",
+    "prod": "npm-run-all clean build server:prod",
     "clean": "rimraf dist",
     "build": "babel ./src --out-dir dist",
-    "prod": "NODE_ENV=production npm-run-all clean build server:prod",
     "watch": "nodemon",
     "sync:database:development": "NODE_ENV=development babel-node ./src/sequelize/sync",
     "sync:database:production": "NODE_ENV=production babel-node ./src/sequelize/sync"

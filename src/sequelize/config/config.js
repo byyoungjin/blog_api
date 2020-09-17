@@ -8,12 +8,8 @@ module.exports = {
     storage: "sqliteDatabase",
     pool: { max: 1, min: 0 }
   },
-  development_light: {
-    dialect: "sqlite",
-    storage: "sqliteDatabase",
-    pool: { max: 1, min: 0 }
-  },
-  test: {
+
+  staged: {
     username: process.env.PRODUCTION_DB_USERNAME,
     password: process.env.PRODUCTION_DB_PASSWORD,
     database: process.env.PRODUCTION_DB_DATABASE,
