@@ -5,7 +5,7 @@ const postIncludes = [
   Tag,
   {
     model: User,
-    attributes: ["id", "emailAddress", "firstName", "lastName"]
+    attributes: ["id", "firstName", "lastName"]
   }
 ];
 
@@ -74,7 +74,7 @@ export const updatePost = async (req, res) => {
   const { postId } = req.params;
   const newPost = req.body;
   await Post.update(newPost, { where: { id: postId } });
-  res.status(204).json({
+  res.status(200).json({
     message: "post updated!"
   });
 };

@@ -25,7 +25,7 @@ export const deleteTag = wrapperAsync(async (req, res) => {
   const { tagId } = req.params;
   await Tag.destroy({ where: { id: tagId } });
   res.json({
-    message: "post deleted!"
+    message: "tag deleted!"
   });
 });
 

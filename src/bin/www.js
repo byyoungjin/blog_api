@@ -31,9 +31,10 @@ var server = http.createServer(app);
  */
 
 let syncOptions = {};
-if (env === "development") {
-  syncOptions = { force: true };
-}
+//NO Forcing sync
+// if (env === "development") {
+//   syncOptions = { force: true };
+// }
 
 sequelize.sync(syncOptions).then(() => {
   server.listen(port);

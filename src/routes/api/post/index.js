@@ -11,12 +11,12 @@ import {
 
 const router = express.Router();
 
-router.get("/getPosts/:userId", getPostsOfUser);
-router.get("/postsOfTagId/:tagId", getPostByTagId);
-router.get("/getAllPosts", getAllPosts);
-router.get("/getPost/:postId", getPostById);
-router.post("/createPost", createPost);
-router.post("/deletePost/:postId", deletePost);
-router.put("/updatePost/:postId", updatePost);
+router.get("/userId/:userId", getPostsOfUser);
+router.get("/tagId/:tagId", getPostByTagId);
+router.get("/all", getAllPosts);
+router.get("/postId/:postId", getPostById);
+router.post("/create", createPost);
+router.delete("/postId/:postId", deletePost);
+router.put("/postId/:postId", updatePost);
 
 export default router;

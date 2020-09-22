@@ -6,9 +6,10 @@ node_modules
 .idea/
 .DS_store
 .vscode
-config
-config.js
+
 .aws
 credentials
 
 sqliteDatabase
+
+.env

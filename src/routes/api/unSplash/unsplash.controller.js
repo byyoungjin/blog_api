@@ -88,12 +88,12 @@ export const getPhotos = wrapperAsync(async (req, res, next) => {
   const unsplashRes = await unsplash.search.photos(keyword, 1, 9);
   const unsplashResJson = await toJson(unsplashRes);
 
-  const filterdResullt = unsplashResJson.results.map(result => ({
+  const filterdResult = unsplashResJson.results.map(result => ({
     thumbImageSrc: result.urls.thumb,
     regularImageSrc: result.urls.regular,
     userProfile: result.user.links.html,
     userName: result.user.name
   }));
 
-  res.json(filterdResullt);
+  res.json(filterdResult);
 });
