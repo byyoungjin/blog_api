@@ -3,7 +3,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export default {
-  secret: process.env.SECRET_KEY
+  accessTokenSecret: process.env.ACCESS_TOKEN_SECRET_KEY,
+  refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET_KEY,
+  encryptPasswordScret: process.env.ENCRYPT_PASSWORD_SECRET_KEY
 };
 
 export const awsConfig = {

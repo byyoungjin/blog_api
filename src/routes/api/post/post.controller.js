@@ -5,7 +5,7 @@ const postIncludes = [
   Tag,
   {
     model: User,
-    attributes: ["id", "emailAddress", "firstName", "lastName"]
+    attributes: ["id", "firstName", "lastName"]
   }
 ];
 

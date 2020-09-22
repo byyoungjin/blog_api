@@ -4,7 +4,7 @@ import config from "@/config";
 //general encrypt function
 export const encrypt = password => {
   return crypto
-    .createHmac("sha1", config.secret)
+    .createHmac("sha1", config.encryptPasswordScret)
     .update(password)
     .digest("base64");
 };
