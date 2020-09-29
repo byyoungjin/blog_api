@@ -9,7 +9,7 @@ const postIncludes = [
   }
 ];
 
-export const getPostsOfUser = async (req, res) => {
+export const getPostsOfUser = wrapperAsync(async (req, res) => {
   const userId = req.params.userId;
   const posts = await Post.findAll({
     where: { UserId: userId },
@@ -18,7 +18,7 @@ export const getPostsOfUser = async (req, res) => {
   res.json({
     posts
   });
-};
+});
 
 export const getPostByTagId = wrapperAsync(async (req, res) => {
   const { tagId } = req.params;

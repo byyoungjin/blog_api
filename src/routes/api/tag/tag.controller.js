@@ -8,6 +8,30 @@ export const getAllTags = wrapperAsync(async (req, res) => {
   });
 });
 
+export const getTagsByUserId = wrapperAsync(async (req, res) => {
+  const { userId } = req.params;
+  const posts = await Post.findAll({
+    where: { UserId: userId },
+    include: { model: Tag, through: { attributes: [] } }
+  });
+
+  let tags = [];
+  for (const post of posts) {
+    const postTags = post.dataValues.Tags;
+
+    postTags.forEach(postTag => {
+      const isInTags = tags.some(
+        tag => tag.dataValues.id === postTag.dataValues.id
+      );
+
+      if (!isInTags) {
+        tags.push(postTag);
+      }
+    });
+  }
+  res.json({ tags });
+});
+
 export const findOrCreateTag = wrapperAsync(async (req, res) => {
   const tagData = req.body;
   const [tagObj, created] = await Tag.findOrCreate({

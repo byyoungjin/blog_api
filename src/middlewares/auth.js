@@ -16,7 +16,6 @@ export const authMiddleware = wrapperAsync(async (req, res, next) => {
     if (err) {
       res.status(403).send(err.name);
     }
-    console.log("decoded", decoded);
     req.decoded = decoded;
     next();
   });

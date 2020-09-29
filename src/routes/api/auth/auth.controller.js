@@ -67,7 +67,6 @@ export const loginTraditional = wrapperAsync(async (req, res) => {
  */
 export const loginSocial = wrapperAsync(async (req, res) => {
   const userSocialInfo = req.body;
-  console.log("userSocialInfo", userSocialInfo);
   const userData = await getUserWithProviderKeyOrCreate(userSocialInfo);
   const userBasicData = {
     id: userData.id,
@@ -76,7 +75,6 @@ export const loginSocial = wrapperAsync(async (req, res) => {
     uniqueAlias: `${userData.providerKey}@${userData.providerType}`,
     userSmallImageUrl: userData.userSmallImageUrl
   };
-  console.log("userData", userData);
   const userAccessToken = await issueTokenToData({
     data: userBasicData,
     secretKey: accessTokenSecret
