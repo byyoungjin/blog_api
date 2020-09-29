@@ -11,5 +11,4 @@ node_modules
 credentials
 
 sqliteDatabase
-
 .env

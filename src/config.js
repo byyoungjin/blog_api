@@ -4,7 +4,6 @@ dotenv.config();
 
 export default {
   accessTokenSecret: process.env.ACCESS_TOKEN_SECRET_KEY,
-  refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET_KEY,
   encryptPasswordScret: process.env.ENCRYPT_PASSWORD_SECRET_KEY
 };
 
