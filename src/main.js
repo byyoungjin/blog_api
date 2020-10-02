@@ -6,7 +6,12 @@ import api from "@/routes/api";
 import cors from "cors";
 
 const corsOptions = {
-  origin: [/localhost:*/, "https://aws.hyjpost.com", "https://hyjpost.com"],
+  origin: [
+    /localhost:*/,
+    "https://aws.hyjpost.com",
+    "https://hyjpost.com",
+    "https://www.hyjpost.com"
+  ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   preflightContinue: true,
   credentials: true
